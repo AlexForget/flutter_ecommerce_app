@@ -1,4 +1,6 @@
 import 'package:ecommerce_app/src/features/account/account_screen.dart';
+import 'package:ecommerce_app/src/features/checkout/checkout_screen.dart';
+import 'package:ecommerce_app/src/features/leave_review_page/leave_review_screen.dart';
 import 'package:ecommerce_app/src/features/not_found/not_found_screen.dart';
 import 'package:ecommerce_app/src/features/orders_list/orders_list_screen.dart';
 import 'package:ecommerce_app/src/features/product_page/product_screen.dart';
@@ -12,7 +14,9 @@ import 'package:go_router/go_router.dart';
 enum Approute {
   home,
   product,
+  leaveReview,
   cart,
+  checkout,
   order,
   account,
   signIn,
@@ -20,7 +24,7 @@ enum Approute {
 
 final goRouter = GoRouter(
   initialLocation: '/',
-  debugLogDiagnostics: true,
+  debugLogDiagnostics: false,
   routes: [
     GoRoute(
       path: '/',
@@ -34,6 +38,20 @@ final goRouter = GoRouter(
             final productId = state.params['id']!;
             return ProductScreen(productId: productId);
           },
+          routes: [
+            GoRoute(
+              path: 'review',
+              name: Approute.leaveReview.name,
+              pageBuilder: (context, state) {
+                final productId = state.params['id']!;
+                return MaterialPage(
+                  key: state.pageKey,
+                  fullscreenDialog: true,
+                  child: LeaveReviewScreen(productId: productId),
+                );
+              },
+            ),
+          ],
         ),
         GoRoute(
           path: 'cart',
@@ -43,6 +61,17 @@ final goRouter = GoRouter(
             fullscreenDialog: true,
             child: const ShoppingCartScreen(),
           ),
+          routes: [
+            GoRoute(
+              path: 'checkout',
+              name: Approute.checkout.name,
+              pageBuilder: (context, state) => MaterialPage(
+                key: state.pageKey,
+                fullscreenDialog: true,
+                child: const CheckoutScreen(),
+              ),
+            ),
+          ],
         ),
         GoRoute(
           path: 'order',
